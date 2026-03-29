@@ -1,0 +1,17 @@
+# create the file
+echo "" > .gitignore
+```
+
+Open `.gitignore` and paste this:
+```
+# Python
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+*.env
+
+# Node
+frontend/node_modules/
+
+# Secrets
+.env
