@@ -1,121 +1,105 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import TripForm from "./components/TripForm";
+import ItineraryCard from "./components/ItineraryCard";
+import MapView from "./components/MapView";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [itinerary, setItinerary] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={styles.page}>
+      <header style={styles.header}>
+        <h1 style={styles.logo}>TripAI</h1>
+        <p style={styles.tagline}>AI-powered itinerary planner</p>
+      </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <main style={styles.main}>
+        <div style={styles.left}>
+          <TripForm onItineraryReceived={setItinerary} onLoading={setLoading} />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <div style={styles.right}>
+          {loading && (
+            <div style={styles.loading}>Generating your itinerary...</div>
+          )}
+
+          {itinerary && !loading && (
+            <>
+              <h2 style={styles.resultTitle}>
+                Your {itinerary.days.length}-Day {itinerary.destination}{" "}
+                Itinerary
+              </h2>
+              <MapView itinerary={itinerary} />
+              {itinerary.days.map((day) => (
+                <ItineraryCard key={day.day} day={day} />
+              ))}
+            </>
+          )}
+
+          {!itinerary && !loading && (
+            <div style={styles.empty}>
+              Fill in the form to generate your itinerary
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#f0f4f8",
+  },
+  header: {
+    background: "#4f46e5",
+    color: "#fff",
+    padding: "20px 40px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+  },
+  logo: {
+    fontSize: "24px",
+    fontWeight: "700",
+  },
+  tagline: {
+    fontSize: "14px",
+    opacity: 0.8,
+  },
+  main: {
+    display: "flex",
+    gap: "24px",
+    padding: "32px 40px",
+    maxWidth: "1200px",
+    margin: "0 auto",
+  },
+  left: {
+    flexShrink: 0,
+  },
+  right: {
+    flex: 1,
+  },
+  loading: {
+    textAlign: "center",
+    padding: "60px",
+    color: "#4f46e5",
+    fontSize: "16px",
+    fontWeight: "500",
+  },
+  empty: {
+    textAlign: "center",
+    padding: "60px",
+    color: "#a0aec0",
+    fontSize: "15px",
+  },
+  resultTitle: {
+    fontSize: "20px",
+    color: "#2d3748",
+    marginBottom: "16px",
+  },
+};
+
+export default App;
