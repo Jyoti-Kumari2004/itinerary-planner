@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from models import TripRequest, ItineraryResponse
-from services.gemini_service import generate_itinerary
+from services.gorq_services import generate_itinerary
 
 router = APIRouter()
 
