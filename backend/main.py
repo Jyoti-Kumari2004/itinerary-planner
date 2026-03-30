@@ -7,7 +7,10 @@ app = FastAPI(title="Itinerary Planner API")
 # allow React frontend to call this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite's default port
+    allow_origins=[
+        "http://localhost:5173",
+        "https://itinerary-planner-peach.vercel.app/",  # paste your exact URL here
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
