@@ -9,8 +9,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://itinerary-planner-peach.vercel.app/",  # paste your exact URL here
+        "https://itinerary-planner-peach.vercel.app",
     ],
+    allow_origin_regex="https://itinerary-planner.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
 )
